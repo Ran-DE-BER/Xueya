@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+
+<title>血压记录</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 用于生成真正的 Excel xlsx 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 20px;
+
+  min-height: 100vh;
+
+  background: linear-gradient(
+    180deg,
+    #4a4a4c 0%,
+    #2f2f31 25%,
+    #1c1c1e 60%,
+    #000000 100%
+  );
+
+  color: white;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 15px;
+}
+
+
+/* ------------------------------
+   日期时间
+------------------------------ */
+
+.datetime-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+
+  border-radius: 12px;
+  border: none;
+  outline: none;
+
+  font-size: 17px;
+
+  background: rgba(255,255,255,0.10);
+  color: white;
+}
+
+input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+
+/* ------------------------------
+   血压输入区域
+------------------------------ */
+
+.bp-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  margin-top: 15px;
+}
+
+.bp-box {
+  text-align: center;
+
+  background: rgba(255,255,255,0.06);
+
+  border-radius: 16px;
+
+  padding: 12px;
+}
+
+.bp-title {
+  font-size: 15px;
+  color: rgba(255,255,255,0.65);
+}
+
+.bp-name {
+  font-size: 23px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.bp-unit {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+
+.bp-box input {
+  text-align: center;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  margin-top: 10px;
+
+  padding: 10px;
+}
+
+
+/* ------------------------------
+   按钮
+------------------------------ */
+
+button.main {
+  width: 100%;
+
+  padding: 14px;
+
+  margin-top: 15px;
+
+  border-radius: 13px;
+
+  border: none;
+
+  background: #0a84ff;
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+button.main:active {
+  opacity: 0.75;
+}
+
+.export-btn {
+  background: #30d158 !important;
+}
+
+
+/* ------------------------------
+   提示信息
+------------------------------ */
+
+.error {
+  color: #ff453a;
+
+  font-size: 14px;
+
+  margin-top: 12px;
+
+  text-align: center;
+
+  display: none;
+}
+
+
+/* ------------------------------
+   记录
+------------------------------ */
+
+.record {
+  padding: 15px;
+
+  border-radius: 16px;
+
+  margin-bottom: 10px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+
+/* 未导出 */
+.record.new {
+  background: rgba(255,69,58,0.15);
+}
+
+
+/* 已导出 */
+.record.exported {
+  background: rgba(48,209,88,0.13);
+}
+
+
+.record-date {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.record-time {
+  font-size: 13px;
+
+  color: rgba(255,255,255,0.55);
+
+  margin-top: 3px;
+}
+
+
+/* 右侧血压数字 */
+
+.record-bp {
+  text-align: right;
+}
+
+.record-value {
+  font-size: 25px;
+
+  font-weight: 700;
+}
+
+.record-unit {
+  font-size: 11px;
+
+  color: rgba(255,255,255,0.5);
+}
+
+
+/* SYS */
+.sys {
+  color: #ff9f0a;
+}
+
+
+/* DIA */
+.dia {
+  color: #64d2ff;
+}
+
+
+/* 标题 */
+
+.section-title {
+  font-size: 14px;
+
+  color: rgba(255,255,255,0.55);
+
+  margin: 5px 3px 10px 3px;
+}
+
+
+/* 没有记录 */
+
+.empty {
+  text-align: center;
+
+  padding: 30px;
+
+  color: rgba(255,255,255,0.4);
+}
+
+
+/* 小屏幕 */
+
+@media (max-width: 380px) {
+
+  .bp-name {
+    font-size: 20px;
+  }
+
+  .bp-box input {
+    font-size: 26px;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h2>❤️ 血压记录</h2>
+
+
+<!-- ===========================
+     输入区域
+=========================== -->
+
+<div class="card">
+
+  <!-- 日期 + 时间 -->
+
+  <div class="datetime-row">
+
+    <input type="date" id="date">
+
+    <input type="time" id="time">
+
+  </div>
+
+
+  <!-- SYS + DIA -->
+
+  <div class="bp-inputs">
+
+
+    <!-- SYS -->
+
+    <div class="bp-box">
+
+      <div class="bp-title">收缩压</div>
+
+      <div class="bp-name sys">
+        SYS
+      </div>
+
+      <div class="bp-unit">
+        mmHg
+      </div>
+
+      <input
+        type="number"
+        id="sys"
+        inputmode="numeric"
+        placeholder="120"
+        min="50"
+        max="250"
+      >
+
+    </div>
+
+
+    <!-- DIA -->
+
+    <div class="bp-box">
+
+      <div class="bp-title">舒张压</div>
+
+      <div class="bp-name dia">
+        DIA
+      </div>
+
+      <div class="bp-unit">
+        mmHg
+      </div>
+
+      <input
+        type="number"
+        id="dia"
+        inputmode="numeric"
+        placeholder="80"
+        min="30"
+        max="180"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="errorMsg"
+    class="error">
+  </div>
+
+
+  <button
+    id="addButton"
+    class="main"
+    onclick="addRecord()">
+
+    添加血压记录
+
+  </button>
+
+</div>
+
+
+
+<!-- ===========================
+     Excel
+=========================== -->
+
+<div class="card">
+
+  <button
+    class="main export-btn"
+    onclick="exportExcel()">
+
+    导出新的记录到 Excel
+
+  </button>
+
+</div>
+
+
+
+<div class="section-title">
+
+  历史记录
+
+</div>
+
+
+<!-- ===========================
+     记录列表
+=========================== -->
+
+<div id="list"></div>
+
+
+</div>
+
+
+
+<script>
+
+
+// ======================================================
+// 数据
+// ======================================================
+
+let editingId = null;
+
+
+// 使用单独的 bloodPressureRecords
+// 避免与你以前“日常花费”的 records 冲突
+
+let records = JSON.parse(
+  localStorage.getItem("bloodPressureRecords") || "[]"
+);
+
+
+
+// ======================================================
+// 获取当前日期
+// ======================================================
+
+function getCurrentDate() {
+
+  const now = new Date();
+
+  const year = now.getFullYear();
+
+  const month =
+    String(now.getMonth() + 1)
+    .padStart(2, "0");
+
+  const day =
+    String(now.getDate())
+    .padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+
+// ======================================================
+// 获取当前时间
+// ======================================================
+
+function getCurrentTime() {
+
+  const now = new Date();
+
+  const hours =
+    String(now.getHours())
+    .padStart(2, "0");
+
+  const minutes =
+    String(now.getMinutes())
+    .padStart(2, "0");
+
+  return `${hours}:${minutes}`;
+
+}
+
+
+
+// ======================================================
+// 设置当前日期 + 时间
+// ======================================================
+
+function setCurrentDateTime() {
+
+  document.getElementById("date").value =
+    getCurrentDate();
+
+  document.getElementById("time").value =
+    getCurrentTime();
+
+}
+
+
+
+// 页面打开时自动设置
+
+setCurrentDateTime();
+
+
+
+// ======================================================
+// 添加 / 修改记录
+// ======================================================
+
+function addRecord() {
+
+  const date =
+    document.getElementById("date").value;
+
+  const time =
+    document.getElementById("time").value;
+
+  const sys =
+    parseInt(
+      document.getElementById("sys").value
+    );
+
+  const dia =
+    parseInt(
+      document.getElementById("dia").value
+    );
+
+  const error =
+    document.getElementById("errorMsg");
+
+
+  error.style.display = "none";
+
+
+  // ------------------------------
+  // 基础检查
+  // ------------------------------
+
+  if (!date || !time) {
+
+    showError("请选择日期和时间");
+
+    return;
+  }
+
+
+  if (!sys) {
+
+    showError("请输入 SYS 收缩压");
+
+    return;
+  }
+
+
+  if (!dia) {
+
+    showError("请输入 DIA 舒张压");
+
+    return;
+  }
+
+
+  // ------------------------------
+  // 防止明显误输入
+  // ------------------------------
+
+  if (sys < 50 || sys > 250) {
+
+    showError(
+      "SYS 数值似乎不正确，请检查"
+    );
+
+    return;
+  }
+
+
+  if (dia < 30 || dia > 180) {
+
+    showError(
+      "DIA 数值似乎不正确，请检查"
+    );
+
+    return;
+  }
+
+
+  if (dia >= sys) {
+
+    showError(
+      "DIA 应低于 SYS，请检查输入"
+    );
+
+    return;
+  }
+
+
+
+  // ==================================================
+  // 编辑
+  // ==================================================
+
+  if (editingId !== null) {
+
+    const record =
+      records.find(
+        r => r.id === editingId
+      );
+
+
+    if (record) {
+
+      record.date = date;
+
+      record.time = time;
+
+      record.sys = sys;
+
+      record.dia = dia;
+
+
+      // 编辑后重新标记为未导出
+
+      record.exported = false;
+
+    }
+
+
+    editingId = null;
+
+
+    document.getElementById(
+      "addButton"
+    ).innerText =
+      "添加血压记录";
+
+  }
+
+
+  // ==================================================
+  // 新增
+  // ==================================================
+
+  else {
+
+    records.push({
+
+      id: Date.now(),
+
+      date: date,
+
+      time: time,
+
+      sys: sys,
+
+      dia: dia,
+
+      exported: false
+
+    });
+
+  }
+
+
+
+  save();
+
+  render();
+
+  clearInput();
+
+}
+
+
+
+// ======================================================
+// 显示错误
+// ======================================================
+
+function showError(message) {
+
+  const error =
+    document.getElementById("errorMsg");
+
+  error.innerText = message;
+
+  error.style.display = "block";
+
+}
+
+
+
+// ======================================================
+// 清除输入
+// ======================================================
+
+function clearInput() {
+
+  document.getElementById("sys").value = "";
+
+  document.getElementById("dia").value = "";
+
+
+  // 添加完成后重新刷新为当前时间
+
+  setCurrentDateTime();
+
+
+  // 输入焦点自动回 SYS
+
+  document.getElementById("sys").focus();
+
+}
+
+
+
+// ======================================================
+// 保存
+// ======================================================
+
+function save() {
+
+  localStorage.setItem(
+
+    "bloodPressureRecords",
+
+    JSON.stringify(records)
+
+  );
+
+}
+
+
+
+// ======================================================
+// 渲染记录
+// ======================================================
+
+function render() {
+
+  const list =
+    document.getElementById("list");
+
+
+  list.innerHTML = "";
+
+
+  // 没有记录
+
+  if (records.length === 0) {
+
+    list.innerHTML = `
+
+      <div class="card empty">
+
+        还没有血压记录
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+
+  // 按日期时间倒序排列
+
+  const sortedRecords =
+    records
+      .slice()
+      .sort((a, b) => {
+
+        const aTime =
+          new Date(
+            `${a.date}T${a.time}`
+          );
+
+        const bTime =
+          new Date(
+            `${b.date}T${b.time}`
+          );
+
+        return bTime - aTime;
+
+      });
+
+
+
+  sortedRecords.forEach(r => {
+
+
+    const div =
+      document.createElement("div");
+
+
+    div.className =
+      "record " +
+      (r.exported
+        ? "exported"
+        : "new");
+
+
+    div.innerHTML = `
+
+      <div>
+
+        <div class="record-date">
+
+          ${formatDate(r.date)}
+
+        </div>
+
+        <div class="record-time">
+
+          ${r.time}
+
+          ${r.exported
+            ? " · 已导出"
+            : " · 未导出"}
+
+        </div>
+
+      </div>
+
+
+      <div class="record-bp">
+
+        <div class="record-value">
+
+          <span class="sys">
+            ${r.sys}
+          </span>
+
+          /
+
+          <span class="dia">
+            ${r.dia}
+          </span>
+
+        </div>
+
+        <div class="record-unit">
+
+          SYS / DIA mmHg
+
+        </div>
+
+      </div>
+
+    `;
+
+
+
+    // ==================================================
+    // 点击记录
+    // ==================================================
+
+    div.onclick = function () {
+
+
+      const action =
+        confirm(
+
+          `${r.date} ${r.time}\n` +
+
+          `SYS ${r.sys} / DIA ${r.dia}\n\n` +
+
+          `确定 = 编辑\n` +
+
+          `取消 = 进入删除选项`
+
+        );
+
+
+
+      // 编辑
+
+      if (action) {
+
+        editRecord(r);
+
+      }
+
+
+      // 删除
+
+      else {
+
+        const deleteConfirm =
+          confirm(
+            "确定删除这条血压记录吗？"
+          );
+
+
+        if (deleteConfirm) {
+
+          records =
+            records.filter(
+              x => x.id !== r.id
+            );
+
+          save();
+
+          render();
+
+        }
+
+      }
+
+    };
+
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+
+// ======================================================
+// 编辑
+// ======================================================
+
+function editRecord(record) {
+
+  editingId =
+    record.id;
+
+
+  document.getElementById("date").value =
+    record.date;
+
+  document.getElementById("time").value =
+    record.time;
+
+  document.getElementById("sys").value =
+    record.sys;
+
+  document.getElementById("dia").value =
+    record.dia;
+
+
+  document.getElementById(
+    "addButton"
+  ).innerText =
+    "保存修改";
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+
+// ======================================================
+// 日期显示
+// ======================================================
+
+function formatDate(dateString) {
+
+  const parts =
+    dateString.split("-");
+
+
+  return (
+    parts[0] +
+    "年" +
+    parseInt(parts[1]) +
+    "月" +
+    parseInt(parts[2]) +
+    "日"
+  );
+
+}
+
+
+
+// ======================================================
+// Excel 导出
+// 只导出还没有导出的记录
+// ======================================================
+
+function exportExcel() {
+
+
+  // 找出未导出的记录
+
+  const newRecords =
+    records.filter(
+      r => !r.exported
+    );
+
+
+  if (newRecords.length === 0) {
+
+    alert(
+      "没有新的血压记录需要导出"
+    );
+
+    return;
+  }
+
+
+
+  // 按日期时间排序
+
+  newRecords.sort((a, b) => {
+
+    const da =
+      new Date(
+        `${a.date}T${a.time}`
+      );
+
+    const db =
+      new Date(
+        `${b.date}T${b.time}`
+      );
+
+    return da - db;
+
+  });
+
+
+
+  // ==================================================
+  // Excel 数据
+  // ==================================================
+
+  const excelData =
+    newRecords.map(r => ({
+
+      "日期": r.date,
+
+      "时间": r.time,
+
+      "SYS 收缩压": r.sys,
+
+      "DIA 舒张压": r.dia
+
+    }));
+
+
+
+  // 创建 worksheet
+
+  const worksheet =
+    XLSX.utils.json_to_sheet(
+      excelData
+    );
+
+
+
+  // 列宽
+
+  worksheet["!cols"] = [
+
+    { wch: 14 },
+
+    { wch: 10 },
+
+    { wch: 15 },
+
+    { wch: 15 }
+
+  ];
+
+
+
+  // 创建 workbook
+
+  const workbook =
+    XLSX.utils.book_new();
+
+
+  XLSX.utils.book_append_sheet(
+
+    workbook,
+
+    worksheet,
+
+    "血压记录"
+
+  );
+
+
+
+  // ==================================================
+  // 文件名
+  // ==================================================
+
+  const filename =
+
+    "血压记录_" +
+
+    getCurrentDate() +
+
+    ".xlsx";
+
+
+
+  // 下载
+
+  XLSX.writeFile(
+
+    workbook,
+
+    filename
+
+  );
+
+
+
+  // ==================================================
+  // 标记已经导出
+  // ==================================================
+
+  newRecords.forEach(r => {
+
+    const original =
+      records.find(
+        x => x.id === r.id
+      );
+
+    if (original) {
+
+      original.exported = true;
+
+    }
+
+  });
+
+
+
+  save();
+
+  render();
+
+}
+
+
+
+// ======================================================
+// 按 Enter 快速录入
+// ======================================================
+
+document
+  .getElementById("sys")
+  .addEventListener(
+    "keydown",
+    function(e) {
+
+      if (e.key === "Enter") {
+
+        document
+          .getElementById("dia")
+          .focus();
+
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("dia")
+  .addEventListener(
+    "keydown",
+    function(e) {
+
+      if (e.key === "Enter") {
+
+        addRecord();
+
+      }
+
+    }
+  );
+
+
+
+// ======================================================
+// 初始化
+// ======================================================
+
+render();
+
+</script>
+
+</body>
+</html>
