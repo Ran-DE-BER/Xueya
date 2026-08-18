@@ -7,7 +7,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- 用于生成 Excel xlsx 文件 -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -42,9 +41,11 @@ body {
 
 h2 {
   text-align: center;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  font-size: 26px;
+  margin-top: 4px;
+  margin-bottom: 18px;
+
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .card {
@@ -64,104 +65,197 @@ h2 {
 
 
 /* ==========================
-   日期
+   通用输入框
 ========================== */
 
 input {
-  width: 100%;
-
-  padding: 13px;
-
-  margin-top: 8px;
-
-  border-radius: 12px;
-
   border: none;
-
   outline: none;
 
-  font-size: 17px;
-
-  background: rgba(255,255,255,0.10);
-
   color: white;
-}
 
-input::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  font-family: inherit;
 }
 
 
 /* ==========================
-   血压输入
+   日期区域
+========================== */
+
+.date-area {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  margin-bottom: 14px;
+}
+
+
+/*
+  日期输入框
+
+  想改宽度主要修改这里：
+  width: 145px;
+
+  想改高度修改：
+  height: 38px;
+*/
+
+#date {
+  width: 145px;
+
+  height: 38px;
+
+  padding: 0 12px;
+
+  margin: 0;
+
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.09);
+
+  border: 1px solid rgba(255,255,255,0.05);
+
+  color: rgba(255,255,255,0.88);
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  text-align: center;
+
+  text-align-last: center;
+
+  cursor: pointer;
+
+  appearance: none;
+
+  -webkit-appearance: none;
+}
+
+
+/* 日期选择图标 */
+
+#date::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+
+  opacity: 0.45;
+
+  cursor: pointer;
+
+  margin-left: 3px;
+}
+
+
+/* 鼠标放上去 */
+
+#date:hover {
+  background: rgba(255,255,255,0.13);
+}
+
+
+/* 点击日期框 */
+
+#date:focus {
+  background: rgba(255,255,255,0.15);
+
+  border:
+    1px solid rgba(10,132,255,0.45);
+}
+
+
+/* ==========================
+   SYS / DIA 区域
 ========================== */
 
 .bp-inputs {
-
   display: grid;
 
   grid-template-columns: 1fr 1fr;
 
   gap: 12px;
-
-  margin-top: 15px;
 }
 
 .bp-box {
-
   text-align: center;
 
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.055);
 
-  border-radius: 16px;
+  border-radius: 17px;
 
-  padding: 12px;
+  padding: 12px 11px 13px 11px;
+
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 .bp-title {
+  font-size: 14px;
 
-  font-size: 15px;
-
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.55);
 }
 
 .bp-name {
-
-  font-size: 23px;
+  font-size: 22px;
 
   font-weight: 700;
 
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .bp-unit {
+  font-size: 11px;
 
-  font-size: 12px;
+  color: rgba(255,255,255,0.35);
 
-  color: rgba(255,255,255,0.45);
+  margin-top: 1px;
 }
 
+
+/* SYS/DIA 数字输入 */
+
 .bp-box input {
+  width: 100%;
+
+  margin-top: 9px;
+
+  padding: 8px;
+
+  border-radius: 11px;
+
+  background: rgba(255,255,255,0.07);
 
   text-align: center;
 
-  font-size: 30px;
+  font-size: 29px;
 
   font-weight: 700;
-
-  margin-top: 10px;
-
-  padding: 10px;
 }
 
 
-/* ==========================
-   SYS / DIA 颜色
-========================== */
+/* 去掉 number 输入框箭头 */
+
+.bp-box input::-webkit-outer-spin-button,
+.bp-box input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+
+  margin: 0;
+}
+
+.bp-box input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/* SYS */
 
 .sys {
   color: #ff9f0a;
 }
+
+
+/* DIA */
 
 .dia {
   color: #64d2ff;
@@ -173,12 +267,11 @@ input::-webkit-calendar-picker-indicator {
 ========================== */
 
 button.main {
-
   width: 100%;
 
-  padding: 14px;
+  padding: 13px;
 
-  margin-top: 15px;
+  margin-top: 14px;
 
   border-radius: 13px;
 
@@ -188,7 +281,7 @@ button.main {
 
   color: white;
 
-  font-size: 17px;
+  font-size: 16px;
 
   font-weight: 600;
 
@@ -196,7 +289,9 @@ button.main {
 }
 
 button.main:active {
-  opacity: 0.75;
+  opacity: 0.72;
+
+  transform: scale(0.99);
 }
 
 .export-btn {
@@ -205,16 +300,15 @@ button.main:active {
 
 
 /* ==========================
-   错误提示
+   错误
 ========================== */
 
 .error {
-
   color: #ff453a;
 
   font-size: 14px;
 
-  margin-top: 12px;
+  margin-top: 10px;
 
   text-align: center;
 
@@ -223,21 +317,24 @@ button.main:active {
 
 
 /* ==========================
-   历史记录
+   历史记录标题
 ========================== */
 
 .section-title {
-
   font-size: 14px;
 
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.48);
 
-  margin: 5px 3px 10px 3px;
+  margin: 4px 3px 10px 3px;
 }
 
-.record {
 
-  padding: 15px;
+/* ==========================
+   历史记录
+========================== */
+
+.record {
+  padding: 14px;
 
   border-radius: 16px;
 
@@ -251,73 +348,85 @@ button.main:active {
 
   cursor: pointer;
 
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.055);
 }
 
 
 /* 未导出 */
+
 .record.new {
-  background: rgba(255,69,58,0.15);
+  background: rgba(255,69,58,0.14);
 }
 
 
 /* 已导出 */
+
 .record.exported {
-  background: rgba(48,209,88,0.13);
+  background: rgba(48,209,88,0.12);
 }
 
 
 .record-date {
-
   font-size: 15px;
 
   font-weight: 600;
 }
 
 .record-time {
+  font-size: 12px;
 
-  font-size: 13px;
+  color: rgba(255,255,255,0.5);
 
-  color: rgba(255,255,255,0.55);
-
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .record-bp {
-
   text-align: right;
 }
 
 .record-value {
-
   font-size: 25px;
 
   font-weight: 700;
 }
 
 .record-unit {
+  font-size: 10px;
 
-  font-size: 11px;
+  color: rgba(255,255,255,0.38);
 
-  color: rgba(255,255,255,0.5);
+  margin-top: 2px;
 }
 
 
-/* 没有记录 */
+/* ==========================
+   空状态
+========================== */
 
 .empty {
-
   text-align: center;
 
   padding: 30px;
 
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.38);
 }
 
 
-/* 小屏幕 */
+/* ==========================
+   手机小屏幕
+========================== */
 
 @media (max-width: 380px) {
+
+  body {
+    padding: 14px;
+  }
+
+  #date {
+    width: 140px;
+
+    height: 36px;
+  }
 
   .bp-name {
     font-size: 20px;
@@ -337,32 +446,29 @@ button.main:active {
 
 <div class="container">
 
-
 <h2>❤️ 血压记录</h2>
 
-
-<!-- ==========================
-     输入区域
-========================== -->
 
 <div class="card">
 
 
   <!-- 日期 -->
 
-  <input
-    type="date"
-    id="date"
-  >
+  <div class="date-area">
+
+    <input
+      type="date"
+      id="date"
+    >
+
+  </div>
 
 
 
-  <!-- SYS + DIA -->
+  <!-- SYS / DIA -->
 
   <div class="bp-inputs">
 
-
-    <!-- SYS -->
 
     <div class="bp-box">
 
@@ -390,8 +496,6 @@ button.main:active {
     </div>
 
 
-
-    <!-- DIA -->
 
     <div class="bp-box">
 
@@ -433,7 +537,8 @@ button.main:active {
   <button
     id="addButton"
     class="main"
-    onclick="addRecord()">
+    onclick="addRecord()"
+  >
 
     添加血压记录
 
@@ -444,15 +549,14 @@ button.main:active {
 
 
 
-<!-- ==========================
-     Excel 导出
-========================== -->
+<!-- Excel -->
 
 <div class="card">
 
   <button
     class="main export-btn"
-    onclick="exportExcel()">
+    onclick="exportExcel()"
+  >
 
     导出新的记录到 Excel
 
@@ -463,16 +567,9 @@ button.main:active {
 
 
 <div class="section-title">
-
   历史记录
-
 </div>
 
-
-
-<!-- ==========================
-     历史记录列表
-========================== -->
 
 <div id="list"></div>
 
@@ -491,9 +588,6 @@ button.main:active {
 let editingId = null;
 
 
-// 使用独立名称
-// 避免和其他网页的 localStorage 冲突
-
 let records = JSON.parse(
 
   localStorage.getItem(
@@ -505,7 +599,7 @@ let records = JSON.parse(
 
 
 // ======================================================
-// 获取当前日期
+// 当前日期
 // ======================================================
 
 function getCurrentDate() {
@@ -548,7 +642,7 @@ function getCurrentDate() {
 
 
 // ======================================================
-// 获取当前时间
+// 当前时间
 // ======================================================
 
 function getCurrentTime() {
@@ -585,7 +679,7 @@ function getCurrentTime() {
 
 
 // ======================================================
-// 页面打开时自动显示今天日期
+// 设置今天日期
 // ======================================================
 
 function setCurrentDate() {
@@ -641,10 +735,6 @@ function addRecord() {
 
 
 
-  // ==================================================
-  // 检查日期
-  // ==================================================
-
   if (!date) {
 
     showError(
@@ -652,14 +742,9 @@ function addRecord() {
     );
 
     return;
-
   }
 
 
-
-  // ==================================================
-  // 检查 SYS
-  // ==================================================
 
   if (
     Number.isNaN(sys)
@@ -670,14 +755,9 @@ function addRecord() {
     );
 
     return;
-
   }
 
 
-
-  // ==================================================
-  // 检查 DIA
-  // ==================================================
 
   if (
     Number.isNaN(dia)
@@ -688,14 +768,9 @@ function addRecord() {
     );
 
     return;
-
   }
 
 
-
-  // ==================================================
-  // 防止明显误输入
-  // ==================================================
 
   if (
     sys < 50 ||
@@ -707,8 +782,8 @@ function addRecord() {
     );
 
     return;
-
   }
+
 
 
   if (
@@ -721,8 +796,8 @@ function addRecord() {
     );
 
     return;
-
   }
+
 
 
   if (
@@ -734,14 +809,13 @@ function addRecord() {
     );
 
     return;
-
   }
 
 
 
-  // ==================================================
-  // 编辑已有记录
-  // ==================================================
+  // ==============================
+  // 编辑
+  // ==============================
 
   if (
     editingId !== null
@@ -767,17 +841,7 @@ function addRecord() {
         dia;
 
 
-      /*
-        编辑时保留原来记录的时间。
-
-        例如：
-        原记录是 18:25 添加的，
-        后来只修改 SYS，
-        时间仍然显示 18:25。
-      */
-
-
-      // 修改后重新标记为未导出
+      // 编辑后重新变成未导出
 
       record.exported =
         false;
@@ -799,15 +863,12 @@ function addRecord() {
   }
 
 
-  // ==================================================
-  // 新增记录
-  // ==================================================
+  // ==============================
+  // 新增
+  // ==============================
 
   else {
 
-
-    // ⭐ 点击添加的一瞬间
-    // 自动取得当前时间
 
     const time =
       getCurrentTime();
@@ -874,7 +935,7 @@ function showError(message) {
 
 
 // ======================================================
-// 输入完成以后清空 SYS / DIA
+// 清空输入
 // ======================================================
 
 function clearInput() {
@@ -892,12 +953,8 @@ function clearInput() {
     "";
 
 
-  // 日期恢复为今天
-
   setCurrentDate();
 
-
-  // 光标自动回到 SYS
 
   document
     .getElementById("sys")
@@ -908,7 +965,7 @@ function clearInput() {
 
 
 // ======================================================
-// 保存到浏览器
+// 保存
 // ======================================================
 
 function save() {
@@ -946,8 +1003,6 @@ function render() {
 
 
 
-  // 没有记录
-
   if (
     records.length === 0
   ) {
@@ -967,10 +1022,6 @@ function render() {
   }
 
 
-
-  // ==================================================
-  // 按 日期 + 时间 倒序
-  // ==================================================
 
   const sortedRecords =
 
@@ -1001,10 +1052,6 @@ function render() {
       );
 
 
-
-  // ==================================================
-  // 显示每一条记录
-  // ==================================================
 
   sortedRecords.forEach(
     r => {
@@ -1048,13 +1095,9 @@ function render() {
 
             ${
               r.exported
-
                 ?
-
                 " · 已导出"
-
                 :
-
                 " · 未导出"
             }
 
@@ -1097,10 +1140,6 @@ function render() {
 
 
 
-      // ==================================================
-      // 点击历史记录
-      // ==================================================
-
       div.onclick =
         function () {
 
@@ -1120,8 +1159,6 @@ function render() {
 
 
 
-          // 编辑
-
           if (edit) {
 
             editRecord(r);
@@ -1129,16 +1166,12 @@ function render() {
           }
 
 
-          // 删除
-
           else {
 
 
             const deleteConfirm =
               confirm(
-
                 "确定删除这条血压记录吗？"
-
               );
 
 
@@ -1181,7 +1214,7 @@ function render() {
 
 
 // ======================================================
-// 编辑记录
+// 编辑
 // ======================================================
 
 function editRecord(record) {
@@ -1230,7 +1263,7 @@ function editRecord(record) {
 
 
 // ======================================================
-// 日期显示格式
+// 日期格式
 // ======================================================
 
 function formatDate(
@@ -1267,14 +1300,11 @@ function formatDate(
 
 
 // ======================================================
-// Excel 导出
-// 只导出未导出的记录
+// Excel
 // ======================================================
 
 function exportExcel() {
 
-
-  // 找出未导出的记录
 
   const newRecords =
     records.filter(
@@ -1293,12 +1323,9 @@ function exportExcel() {
     );
 
     return;
-
   }
 
 
-
-  // 日期时间排序
 
   newRecords.sort(
     (a, b) => {
@@ -1326,10 +1353,6 @@ function exportExcel() {
 
 
 
-  // ==================================================
-  // Excel 数据
-  // ==================================================
-
   const excelData =
 
     newRecords.map(
@@ -1352,8 +1375,6 @@ function exportExcel() {
 
 
 
-  // 创建 Excel worksheet
-
   const worksheet =
 
     XLSX.utils.json_to_sheet(
@@ -1361,8 +1382,6 @@ function exportExcel() {
     );
 
 
-
-  // Excel 列宽
 
   worksheet["!cols"] = [
 
@@ -1386,8 +1405,6 @@ function exportExcel() {
 
 
 
-  // 创建 Excel workbook
-
   const workbook =
 
     XLSX.utils.book_new();
@@ -1406,10 +1423,6 @@ function exportExcel() {
 
 
 
-  // ==================================================
-  // 文件名
-  // ==================================================
-
   const filename =
 
     "血压记录_" +
@@ -1420,8 +1433,6 @@ function exportExcel() {
 
 
 
-  // 下载 Excel
-
   XLSX.writeFile(
 
     workbook,
@@ -1431,10 +1442,6 @@ function exportExcel() {
   );
 
 
-
-  // ==================================================
-  // 标记为已导出
-  // ==================================================
 
   newRecords.forEach(
     r => {
@@ -1470,12 +1477,8 @@ function exportExcel() {
 
 
 // ======================================================
-// Enter 快速输入
+// Enter 操作
 // ======================================================
-
-
-// SYS 输入完 Enter
-// 自动进入 DIA
 
 document
   .getElementById("sys")
@@ -1501,9 +1504,6 @@ document
   );
 
 
-
-// DIA 输入完 Enter
-// 直接添加记录
 
 document
   .getElementById("dia")
