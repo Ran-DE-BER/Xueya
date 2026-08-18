@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- 用于生成真正的 Excel xlsx 文件 -->
+<!-- 用于生成 Excel xlsx 文件 -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -18,6 +18,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
   margin: 0;
   padding: 20px;
 
@@ -48,39 +49,41 @@ h2 {
 
 .card {
   background: rgba(255,255,255,0.08);
+
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 
   border: 1px solid rgba(255,255,255,0.08);
 
   border-radius: 20px;
+
   padding: 16px;
+
   margin-bottom: 15px;
 }
 
 
-/* ------------------------------
-   日期时间
------------------------------- */
-
-.datetime-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
+/* ==========================
+   日期
+========================== */
 
 input {
   width: 100%;
+
   padding: 13px;
+
   margin-top: 8px;
 
   border-radius: 12px;
+
   border: none;
+
   outline: none;
 
   font-size: 17px;
 
   background: rgba(255,255,255,0.10);
+
   color: white;
 }
 
@@ -89,19 +92,23 @@ input::-webkit-calendar-picker-indicator {
 }
 
 
-/* ------------------------------
-   血压输入区域
------------------------------- */
+/* ==========================
+   血压输入
+========================== */
 
 .bp-inputs {
+
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 12px;
 
   margin-top: 15px;
 }
 
 .bp-box {
+
   text-align: center;
 
   background: rgba(255,255,255,0.06);
@@ -112,25 +119,34 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .bp-title {
+
   font-size: 15px;
+
   color: rgba(255,255,255,0.65);
 }
 
 .bp-name {
+
   font-size: 23px;
+
   font-weight: 700;
+
   margin-top: 3px;
 }
 
 .bp-unit {
+
   font-size: 12px;
+
   color: rgba(255,255,255,0.45);
 }
 
 .bp-box input {
+
   text-align: center;
 
   font-size: 30px;
+
   font-weight: 700;
 
   margin-top: 10px;
@@ -139,11 +155,25 @@ input::-webkit-calendar-picker-indicator {
 }
 
 
-/* ------------------------------
+/* ==========================
+   SYS / DIA 颜色
+========================== */
+
+.sys {
+  color: #ff9f0a;
+}
+
+.dia {
+  color: #64d2ff;
+}
+
+
+/* ==========================
    按钮
------------------------------- */
+========================== */
 
 button.main {
+
   width: 100%;
 
   padding: 14px;
@@ -174,11 +204,12 @@ button.main:active {
 }
 
 
-/* ------------------------------
-   提示信息
------------------------------- */
+/* ==========================
+   错误提示
+========================== */
 
 .error {
+
   color: #ff453a;
 
   font-size: 14px;
@@ -191,11 +222,21 @@ button.main:active {
 }
 
 
-/* ------------------------------
-   记录
------------------------------- */
+/* ==========================
+   历史记录
+========================== */
+
+.section-title {
+
+  font-size: 14px;
+
+  color: rgba(255,255,255,0.55);
+
+  margin: 5px 3px 10px 3px;
+}
 
 .record {
+
   padding: 15px;
 
   border-radius: 16px;
@@ -227,11 +268,14 @@ button.main:active {
 
 
 .record-date {
+
   font-size: 15px;
+
   font-weight: 600;
 }
 
 .record-time {
+
   font-size: 13px;
 
   color: rgba(255,255,255,0.55);
@@ -239,52 +283,30 @@ button.main:active {
   margin-top: 3px;
 }
 
-
-/* 右侧血压数字 */
-
 .record-bp {
+
   text-align: right;
 }
 
 .record-value {
+
   font-size: 25px;
 
   font-weight: 700;
 }
 
 .record-unit {
+
   font-size: 11px;
 
   color: rgba(255,255,255,0.5);
 }
 
 
-/* SYS */
-.sys {
-  color: #ff9f0a;
-}
-
-
-/* DIA */
-.dia {
-  color: #64d2ff;
-}
-
-
-/* 标题 */
-
-.section-title {
-  font-size: 14px;
-
-  color: rgba(255,255,255,0.55);
-
-  margin: 5px 3px 10px 3px;
-}
-
-
 /* 没有记录 */
 
 .empty {
+
   text-align: center;
 
   padding: 30px;
@@ -315,24 +337,24 @@ button.main:active {
 
 <div class="container">
 
+
 <h2>❤️ 血压记录</h2>
 
 
-<!-- ===========================
+<!-- ==========================
      输入区域
-=========================== -->
+========================== -->
 
 <div class="card">
 
-  <!-- 日期 + 时间 -->
 
-  <div class="datetime-row">
+  <!-- 日期 -->
 
-    <input type="date" id="date">
+  <input
+    type="date"
+    id="date"
+  >
 
-    <input type="time" id="time">
-
-  </div>
 
 
   <!-- SYS + DIA -->
@@ -344,7 +366,9 @@ button.main:active {
 
     <div class="bp-box">
 
-      <div class="bp-title">收缩压</div>
+      <div class="bp-title">
+        收缩压
+      </div>
 
       <div class="bp-name sys">
         SYS
@@ -366,11 +390,14 @@ button.main:active {
     </div>
 
 
+
     <!-- DIA -->
 
     <div class="bp-box">
 
-      <div class="bp-title">舒张压</div>
+      <div class="bp-title">
+        舒张压
+      </div>
 
       <div class="bp-name dia">
         DIA
@@ -391,13 +418,16 @@ button.main:active {
 
     </div>
 
+
   </div>
+
 
 
   <div
     id="errorMsg"
     class="error">
   </div>
+
 
 
   <button
@@ -409,13 +439,14 @@ button.main:active {
 
   </button>
 
+
 </div>
 
 
 
-<!-- ===========================
-     Excel
-=========================== -->
+<!-- ==========================
+     Excel 导出
+========================== -->
 
 <div class="card">
 
@@ -438,9 +469,10 @@ button.main:active {
 </div>
 
 
-<!-- ===========================
-     记录列表
-=========================== -->
+
+<!-- ==========================
+     历史记录列表
+========================== -->
 
 <div id="list"></div>
 
@@ -459,11 +491,15 @@ button.main:active {
 let editingId = null;
 
 
-// 使用单独的 bloodPressureRecords
-// 避免与你以前“日常花费”的 records 冲突
+// 使用独立名称
+// 避免和其他网页的 localStorage 冲突
 
 let records = JSON.parse(
-  localStorage.getItem("bloodPressureRecords") || "[]"
+
+  localStorage.getItem(
+    "bloodPressureRecords"
+  ) || "[]"
+
 );
 
 
@@ -476,17 +512,36 @@ function getCurrentDate() {
 
   const now = new Date();
 
-  const year = now.getFullYear();
+
+  const year =
+    now.getFullYear();
+
 
   const month =
-    String(now.getMonth() + 1)
-    .padStart(2, "0");
+    String(
+      now.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
 
   const day =
-    String(now.getDate())
-    .padStart(2, "0");
+    String(
+      now.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
 
-  return `${year}-${month}-${day}`;
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+  );
 
 }
 
@@ -500,194 +555,283 @@ function getCurrentTime() {
 
   const now = new Date();
 
+
   const hours =
-    String(now.getHours())
-    .padStart(2, "0");
+    String(
+      now.getHours()
+    ).padStart(
+      2,
+      "0"
+    );
+
 
   const minutes =
-    String(now.getMinutes())
-    .padStart(2, "0");
+    String(
+      now.getMinutes()
+    ).padStart(
+      2,
+      "0"
+    );
 
-  return `${hours}:${minutes}`;
+
+  return (
+    hours +
+    ":" +
+    minutes
+  );
 
 }
 
 
 
 // ======================================================
-// 设置当前日期 + 时间
+// 页面打开时自动显示今天日期
 // ======================================================
 
-function setCurrentDateTime() {
+function setCurrentDate() {
 
-  document.getElementById("date").value =
+  document
+    .getElementById("date")
+    .value =
     getCurrentDate();
 
-  document.getElementById("time").value =
-    getCurrentTime();
-
 }
 
 
-
-// 页面打开时自动设置
-
-setCurrentDateTime();
+setCurrentDate();
 
 
 
 // ======================================================
-// 添加 / 修改记录
+// 添加 / 修改
 // ======================================================
 
 function addRecord() {
 
-  const date =
-    document.getElementById("date").value;
 
-  const time =
-    document.getElementById("time").value;
+  const date =
+    document
+      .getElementById("date")
+      .value;
+
 
   const sys =
     parseInt(
-      document.getElementById("sys").value
+      document
+        .getElementById("sys")
+        .value
     );
+
 
   const dia =
     parseInt(
-      document.getElementById("dia").value
+      document
+        .getElementById("dia")
+        .value
     );
 
+
   const error =
-    document.getElementById("errorMsg");
+    document
+      .getElementById("errorMsg");
 
 
-  error.style.display = "none";
+  error.style.display =
+    "none";
 
 
-  // ------------------------------
-  // 基础检查
-  // ------------------------------
 
-  if (!date || !time) {
+  // ==================================================
+  // 检查日期
+  // ==================================================
 
-    showError("请选择日期和时间");
+  if (!date) {
+
+    showError(
+      "请选择日期"
+    );
 
     return;
+
   }
 
 
-  if (!sys) {
 
-    showError("请输入 SYS 收缩压");
+  // ==================================================
+  // 检查 SYS
+  // ==================================================
+
+  if (
+    Number.isNaN(sys)
+  ) {
+
+    showError(
+      "请输入 SYS 收缩压"
+    );
 
     return;
+
   }
 
 
-  if (!dia) {
 
-    showError("请输入 DIA 舒张压");
+  // ==================================================
+  // 检查 DIA
+  // ==================================================
+
+  if (
+    Number.isNaN(dia)
+  ) {
+
+    showError(
+      "请输入 DIA 舒张压"
+    );
 
     return;
+
   }
 
 
-  // ------------------------------
+
+  // ==================================================
   // 防止明显误输入
-  // ------------------------------
+  // ==================================================
 
-  if (sys < 50 || sys > 250) {
+  if (
+    sys < 50 ||
+    sys > 250
+  ) {
 
     showError(
       "SYS 数值似乎不正确，请检查"
     );
 
     return;
+
   }
 
 
-  if (dia < 30 || dia > 180) {
+  if (
+    dia < 30 ||
+    dia > 180
+  ) {
 
     showError(
       "DIA 数值似乎不正确，请检查"
     );
 
     return;
+
   }
 
 
-  if (dia >= sys) {
+  if (
+    dia >= sys
+  ) {
 
     showError(
       "DIA 应低于 SYS，请检查输入"
     );
 
     return;
+
   }
 
 
 
   // ==================================================
-  // 编辑
+  // 编辑已有记录
   // ==================================================
 
-  if (editingId !== null) {
+  if (
+    editingId !== null
+  ) {
+
 
     const record =
       records.find(
-        r => r.id === editingId
+        r =>
+          r.id === editingId
       );
 
 
     if (record) {
 
-      record.date = date;
+      record.date =
+        date;
 
-      record.time = time;
+      record.sys =
+        sys;
 
-      record.sys = sys;
+      record.dia =
+        dia;
 
-      record.dia = dia;
+
+      /*
+        编辑时保留原来记录的时间。
+
+        例如：
+        原记录是 18:25 添加的，
+        后来只修改 SYS，
+        时间仍然显示 18:25。
+      */
 
 
-      // 编辑后重新标记为未导出
+      // 修改后重新标记为未导出
 
-      record.exported = false;
+      record.exported =
+        false;
 
     }
 
 
-    editingId = null;
+    editingId =
+      null;
 
 
-    document.getElementById(
-      "addButton"
-    ).innerText =
+    document
+      .getElementById(
+        "addButton"
+      )
+      .innerText =
       "添加血压记录";
 
   }
 
 
   // ==================================================
-  // 新增
+  // 新增记录
   // ==================================================
 
   else {
 
+
+    // ⭐ 点击添加的一瞬间
+    // 自动取得当前时间
+
+    const time =
+      getCurrentTime();
+
+
     records.push({
 
-      id: Date.now(),
+      id:
+        Date.now(),
 
-      date: date,
+      date:
+        date,
 
-      time: time,
+      time:
+        time,
 
-      sys: sys,
+      sys:
+        sys,
 
-      dia: dia,
+      dia:
+        dia,
 
-      exported: false
+      exported:
+        false
 
     });
 
@@ -706,48 +850,65 @@ function addRecord() {
 
 
 // ======================================================
-// 显示错误
+// 错误提示
 // ======================================================
 
 function showError(message) {
 
   const error =
-    document.getElementById("errorMsg");
+    document
+      .getElementById(
+        "errorMsg"
+      );
 
-  error.innerText = message;
 
-  error.style.display = "block";
+  error.innerText =
+    message;
+
+
+  error.style.display =
+    "block";
 
 }
 
 
 
 // ======================================================
-// 清除输入
+// 输入完成以后清空 SYS / DIA
 // ======================================================
 
 function clearInput() {
 
-  document.getElementById("sys").value = "";
 
-  document.getElementById("dia").value = "";
-
-
-  // 添加完成后重新刷新为当前时间
-
-  setCurrentDateTime();
+  document
+    .getElementById("sys")
+    .value =
+    "";
 
 
-  // 输入焦点自动回 SYS
+  document
+    .getElementById("dia")
+    .value =
+    "";
 
-  document.getElementById("sys").focus();
+
+  // 日期恢复为今天
+
+  setCurrentDate();
+
+
+  // 光标自动回到 SYS
+
+  document
+    .getElementById("sys")
+    .focus();
 
 }
 
 
 
 // ======================================================
-// 保存
+// 保存到浏览器
 // ======================================================
 
 function save() {
@@ -756,7 +917,9 @@ function save() {
 
     "bloodPressureRecords",
 
-    JSON.stringify(records)
+    JSON.stringify(
+      records
+    )
 
   );
 
@@ -765,21 +928,29 @@ function save() {
 
 
 // ======================================================
-// 渲染记录
+// 历史记录
 // ======================================================
 
 function render() {
 
+
   const list =
-    document.getElementById("list");
+    document
+      .getElementById(
+        "list"
+      );
 
 
-  list.innerHTML = "";
+  list.innerHTML =
+    "";
+
 
 
   // 没有记录
 
-  if (records.length === 0) {
+  if (
+    records.length === 0
+  ) {
 
     list.innerHTML = `
 
@@ -792,197 +963,266 @@ function render() {
     `;
 
     return;
+
   }
 
 
 
-  // 按日期时间倒序排列
+  // ==================================================
+  // 按 日期 + 时间 倒序
+  // ==================================================
 
   const sortedRecords =
+
     records
       .slice()
-      .sort((a, b) => {
+      .sort(
+        (a, b) => {
 
-        const aTime =
-          new Date(
-            `${a.date}T${a.time}`
+
+          const aTime =
+            new Date(
+              `${a.date}T${a.time || "00:00"}`
+            );
+
+
+          const bTime =
+            new Date(
+              `${b.date}T${b.time || "00:00"}`
+            );
+
+
+          return (
+            bTime -
+            aTime
           );
 
-        const bTime =
-          new Date(
-            `${b.date}T${b.time}`
+        }
+      );
+
+
+
+  // ==================================================
+  // 显示每一条记录
+  // ==================================================
+
+  sortedRecords.forEach(
+    r => {
+
+
+      const div =
+        document
+          .createElement(
+            "div"
           );
 
-        return bTime - aTime;
 
-      });
-
-
-
-  sortedRecords.forEach(r => {
-
-
-    const div =
-      document.createElement("div");
-
-
-    div.className =
-      "record " +
-      (r.exported
-        ? "exported"
-        : "new");
-
-
-    div.innerHTML = `
-
-      <div>
-
-        <div class="record-date">
-
-          ${formatDate(r.date)}
-
-        </div>
-
-        <div class="record-time">
-
-          ${r.time}
-
-          ${r.exported
-            ? " · 已导出"
-            : " · 未导出"}
-
-        </div>
-
-      </div>
-
-
-      <div class="record-bp">
-
-        <div class="record-value">
-
-          <span class="sys">
-            ${r.sys}
-          </span>
-
-          /
-
-          <span class="dia">
-            ${r.dia}
-          </span>
-
-        </div>
-
-        <div class="record-unit">
-
-          SYS / DIA mmHg
-
-        </div>
-
-      </div>
-
-    `;
-
-
-
-    // ==================================================
-    // 点击记录
-    // ==================================================
-
-    div.onclick = function () {
-
-
-      const action =
-        confirm(
-
-          `${r.date} ${r.time}\n` +
-
-          `SYS ${r.sys} / DIA ${r.dia}\n\n` +
-
-          `确定 = 编辑\n` +
-
-          `取消 = 进入删除选项`
-
+      div.className =
+        "record " +
+        (
+          r.exported
+            ?
+            "exported"
+            :
+            "new"
         );
 
 
 
-      // 编辑
-
-      if (action) {
-
-        editRecord(r);
-
-      }
+      div.innerHTML = `
 
 
-      // 删除
-
-      else {
-
-        const deleteConfirm =
-          confirm(
-            "确定删除这条血压记录吗？"
-          );
+        <div>
 
 
-        if (deleteConfirm) {
+          <div class="record-date">
 
-          records =
-            records.filter(
-              x => x.id !== r.id
+            ${formatDate(r.date)}
+
+          </div>
+
+
+          <div class="record-time">
+
+            ${r.time || "--:--"}
+
+            ${
+              r.exported
+
+                ?
+
+                " · 已导出"
+
+                :
+
+                " · 未导出"
+            }
+
+          </div>
+
+
+        </div>
+
+
+
+        <div class="record-bp">
+
+
+          <div class="record-value">
+
+            <span class="sys">
+              ${r.sys}
+            </span>
+
+            /
+
+            <span class="dia">
+              ${r.dia}
+            </span>
+
+          </div>
+
+
+          <div class="record-unit">
+
+            SYS / DIA mmHg
+
+          </div>
+
+
+        </div>
+
+
+      `;
+
+
+
+      // ==================================================
+      // 点击历史记录
+      // ==================================================
+
+      div.onclick =
+        function () {
+
+
+          const edit =
+            confirm(
+
+              `${r.date} ${r.time || ""}\n` +
+
+              `SYS ${r.sys} / DIA ${r.dia}\n\n` +
+
+              `确定 = 编辑\n` +
+
+              `取消 = 删除选项`
+
             );
 
-          save();
-
-          render();
-
-        }
-
-      }
-
-    };
 
 
-    list.appendChild(div);
+          // 编辑
 
-  });
+          if (edit) {
+
+            editRecord(r);
+
+          }
+
+
+          // 删除
+
+          else {
+
+
+            const deleteConfirm =
+              confirm(
+
+                "确定删除这条血压记录吗？"
+
+              );
+
+
+            if (
+              deleteConfirm
+            ) {
+
+
+              records =
+                records.filter(
+
+                  x =>
+                    x.id !== r.id
+
+                );
+
+
+              save();
+
+              render();
+
+            }
+
+          }
+
+        };
+
+
+
+      list.appendChild(
+        div
+      );
+
+
+    }
+  );
 
 }
 
 
 
 // ======================================================
-// 编辑
+// 编辑记录
 // ======================================================
 
 function editRecord(record) {
+
 
   editingId =
     record.id;
 
 
-  document.getElementById("date").value =
+  document
+    .getElementById("date")
+    .value =
     record.date;
 
-  document.getElementById("time").value =
-    record.time;
 
-  document.getElementById("sys").value =
+  document
+    .getElementById("sys")
+    .value =
     record.sys;
 
-  document.getElementById("dia").value =
+
+  document
+    .getElementById("dia")
+    .value =
     record.dia;
 
 
-  document.getElementById(
-    "addButton"
-  ).innerText =
+  document
+    .getElementById(
+      "addButton"
+    )
+    .innerText =
     "保存修改";
 
 
   window.scrollTo({
+
     top: 0,
+
     behavior: "smooth"
+
   });
 
 }
@@ -990,22 +1230,36 @@ function editRecord(record) {
 
 
 // ======================================================
-// 日期显示
+// 日期显示格式
 // ======================================================
 
-function formatDate(dateString) {
+function formatDate(
+  dateString
+) {
+
 
   const parts =
     dateString.split("-");
 
 
   return (
+
     parts[0] +
+
     "年" +
-    parseInt(parts[1]) +
+
+    parseInt(
+      parts[1]
+    ) +
+
     "月" +
-    parseInt(parts[2]) +
+
+    parseInt(
+      parts[2]
+    ) +
+
     "日"
+
   );
 
 }
@@ -1014,7 +1268,7 @@ function formatDate(dateString) {
 
 // ======================================================
 // Excel 导出
-// 只导出还没有导出的记录
+// 只导出未导出的记录
 // ======================================================
 
 function exportExcel() {
@@ -1024,38 +1278,51 @@ function exportExcel() {
 
   const newRecords =
     records.filter(
-      r => !r.exported
+      r =>
+        !r.exported
     );
 
 
-  if (newRecords.length === 0) {
+
+  if (
+    newRecords.length === 0
+  ) {
 
     alert(
       "没有新的血压记录需要导出"
     );
 
     return;
+
   }
 
 
 
-  // 按日期时间排序
+  // 日期时间排序
 
-  newRecords.sort((a, b) => {
+  newRecords.sort(
+    (a, b) => {
 
-    const da =
-      new Date(
-        `${a.date}T${a.time}`
+
+      const da =
+        new Date(
+          `${a.date}T${a.time || "00:00"}`
+        );
+
+
+      const db =
+        new Date(
+          `${b.date}T${b.time || "00:00"}`
+        );
+
+
+      return (
+        da -
+        db
       );
 
-    const db =
-      new Date(
-        `${b.date}T${b.time}`
-      );
-
-    return da - db;
-
-  });
+    }
+  );
 
 
 
@@ -1064,49 +1331,67 @@ function exportExcel() {
   // ==================================================
 
   const excelData =
-    newRecords.map(r => ({
 
-      "日期": r.date,
+    newRecords.map(
+      r => ({
 
-      "时间": r.time,
+        "日期":
+          r.date,
 
-      "SYS 收缩压": r.sys,
+        "时间":
+          r.time || "",
 
-      "DIA 舒张压": r.dia
+        "SYS 收缩压":
+          r.sys,
 
-    }));
+        "DIA 舒张压":
+          r.dia
+
+      })
+    );
 
 
 
-  // 创建 worksheet
+  // 创建 Excel worksheet
 
   const worksheet =
+
     XLSX.utils.json_to_sheet(
       excelData
     );
 
 
 
-  // 列宽
+  // Excel 列宽
 
   worksheet["!cols"] = [
 
-    { wch: 14 },
+    {
+      wch: 14
+    },
 
-    { wch: 10 },
+    {
+      wch: 10
+    },
 
-    { wch: 15 },
+    {
+      wch: 15
+    },
 
-    { wch: 15 }
+    {
+      wch: 15
+    }
 
   ];
 
 
 
-  // 创建 workbook
+  // 创建 Excel workbook
 
   const workbook =
+
     XLSX.utils.book_new();
+
 
 
   XLSX.utils.book_append_sheet(
@@ -1135,7 +1420,7 @@ function exportExcel() {
 
 
 
-  // 下载
+  // 下载 Excel
 
   XLSX.writeFile(
 
@@ -1148,23 +1433,31 @@ function exportExcel() {
 
 
   // ==================================================
-  // 标记已经导出
+  // 标记为已导出
   // ==================================================
 
-  newRecords.forEach(r => {
+  newRecords.forEach(
+    r => {
 
-    const original =
-      records.find(
-        x => x.id === r.id
-      );
 
-    if (original) {
+      const original =
+        records.find(
 
-      original.exported = true;
+          x =>
+            x.id === r.id
+
+        );
+
+
+      if (original) {
+
+        original.exported =
+          true;
+
+      }
 
     }
-
-  });
+  );
 
 
 
@@ -1177,16 +1470,25 @@ function exportExcel() {
 
 
 // ======================================================
-// 按 Enter 快速录入
+// Enter 快速输入
 // ======================================================
+
+
+// SYS 输入完 Enter
+// 自动进入 DIA
 
 document
   .getElementById("sys")
   .addEventListener(
+
     "keydown",
+
     function(e) {
 
-      if (e.key === "Enter") {
+
+      if (
+        e.key === "Enter"
+      ) {
 
         document
           .getElementById("dia")
@@ -1195,22 +1497,33 @@ document
       }
 
     }
+
   );
 
+
+
+// DIA 输入完 Enter
+// 直接添加记录
 
 document
   .getElementById("dia")
   .addEventListener(
+
     "keydown",
+
     function(e) {
 
-      if (e.key === "Enter") {
+
+      if (
+        e.key === "Enter"
+      ) {
 
         addRecord();
 
       }
 
     }
+
   );
 
 
@@ -1220,6 +1533,7 @@ document
 // ======================================================
 
 render();
+
 
 </script>
 
